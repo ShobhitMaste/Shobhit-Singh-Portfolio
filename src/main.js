@@ -1,13 +1,15 @@
 import * as THREE from "three";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import Geometries from "three/src/renderers/common/Geometries.js";
-import { threshold } from "three/tsl";
+import { cameraFar, modelPosition, threshold } from "three/tsl";
 import { DirectionalLight } from "three/webgpu";
 import { EffectComposer } from "/node_modules/three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "/node_modules/three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "/node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 const canvas = document.getElementById("bg");
+import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
+
 
 
 //settings
@@ -72,21 +74,66 @@ const moonGeometry = new THREE.SphereGeometry(3, 300, 300);
 const moonMaterial = new THREE.MeshStandardMaterial( { 
   color: 0x202020,
   map: moonTexture,
-  // normalMap: moonTexture,
+  normalMap: moon3dTexture,
 } );
 const moon = new THREE.Mesh( moonGeometry, moonMaterial );
-moon.position.set(0, -3, -299);
-moon.rotation.x = 0.875;
-moon.rotation.y = 0.274;
+var vh = window.innerHeight;
+var iw = window.innerWidth;
+var aspect = iw / vh;
+console.log(aspect);
+console.log("vh - " + vh);
+// moon.position.set(-1.8, -3.6, -vh/3.318);
+moon.position.set(1000, 1000, -500);
+moon.rotation.x = 0.775;
+moon.rotation.y = 0.674;
 scene.add(moon);
 
-//phone 
+// smartphone.position.x += -0.1;
+//   smartphone.position.y += 2.66;
+//   smartphone.position.z -= 1.5;
 
+//phone 
+const loader = new GLTFLoader();
+var smartphone;
+loader.load('models/newSmartphone.glb', (gltf) => {
+  smartphone = gltf.scene;
+  // smartphone.rotation.y -= -0.17;
+  smartphone.rotation.z -= aspect >= 1.95? 0.155: 0.198;
+  // smartphone.rotation.x -= -0.04;
+  smartphone.position.set(100, 100, -400);
+  scene.add(smartphone);
+}, undefined, (err)=>{
+  console.log(err);
+});
+// gltf.scene.position.set(0, 0, 0);
+
+let currentSection = 0;
+const totalSections = 3;
+var lastSection = 0;
+
+  window.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    lastSection = currentSection;
+    if (e.deltaY > 0 && currentSection < totalSections - 1) {
+      currentSection++;
+    } else if (e.deltaY < 0 && currentSection > 0) {
+      currentSection--;
+    }
+    // console.log(lastSection, currentSection);
+
+    window.scrollTo({
+      top: currentSection * window.innerHeight,
+      behavior: 'smooth'
+    });
+  }, { passive: false });
 
 
 //lights
-const pointLight = new THREE.PointLight(0xfff0bb, 99, 100);
-pointLight.position.set(2, 1, -295.5);
+const pointLight = new THREE.PointLight(0xfff0bb, 10 , 100);
+pointLight.position.copy(moon.position);
+pointLight.position.x += 3;
+pointLight.position.y += 4;
+pointLight.position.z += -1.6;
 scene.add(pointLight);
 
 
@@ -130,38 +177,8 @@ window.addEventListener(
 );
 
 
-var lastScroll = 0;
-window.onscroll = () => scrollCheck();
-function scrollCheck() {
-  let t = document.body.getBoundingClientRect().top;
-  t = Math.abs(t);
-  console.log(t);
-  if(t > lastScroll){
-    //scroll down
-    // console.log("scroll down");
-    lastScroll = t;
-    if(t < 10){
-      //scroll to moon
-      window.scrollTo({
-        top: 990,
-        behavior: "smooth",
-      });
-      camera.lookAt(moon.position);
-    }
-  } else {
-    //scroll up
-    // console.log("scroll up");
-    if(t < 1000 && t > 900){
-      window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-      });
+var once = true;
 
-    }
-    lastScroll = t;
-  }
-}
-let t;
 function animate() {
   // console.log(camera.position)
   
@@ -169,8 +186,49 @@ function animate() {
   let t = document.body.getBoundingClientRect().top;
   camera.position.z = t * 0.3;
   camera.rotation.z = t * 0.0002;
+  console.log(camera.fov);
   sun.rotation.x += 0.0001;
   sun.rotation.y += 0.0002;
+
+  if(smartphone){
+    
+    if(currentSection == 1 && once == true){
+      const targetPos = new THREE.Vector3(
+        moon.position.x + 0.3,
+        moon.position.y + 2.701,
+        moon.position.z - 1.3
+      );
+
+      smartphone.position.lerp(targetPos, 0.05);   //used for animation
+      
+      
+      const dir = new THREE.Vector3();
+      camera.getWorldDirection(dir);
+      const moonPos = new THREE.Vector3();
+      moonPos.copy(camera.position).add(dir.multiplyScalar(6));
+      moonPos.x += -2.6;
+      moonPos.y += -3.8;
+      moonPos.z += 4;
+      moon.position.lerp(moonPos, 0.05);
+      // smartphone.lookAt(camera.position);
+
+      setTimeout(() => {
+        once = false;
+      }, 2000);
+      
+      // moon.position.lerp(moonPos, 0.05);
+    } 
+    // else {
+    //   setTimeout(() => {
+    //     const hiddenPos = new THREE.Vector3(100, 100, -600);
+    //     smartphone.position.lerp(hiddenPos, 0.05);
+  
+    //     const hiddenPosMoon = new THREE.Vector3(250, 450, -1000);
+    //     moon.position.lerp(hiddenPosMoon, 0.05);
+    //   }, 300);
+    // }
+  }
+
   // renderer.render( scene, camera );
   // moon.rotation.x += 0.0004;
   bloomComposer.render();
@@ -181,3 +239,58 @@ function animate() {
 }
 animate();
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// var lastScroll = 0;
+// window.onscroll = () => scrollCheck();
+// function scrollCheck() {
+//   let t = document.body.getBoundingClientRect().top;
+//   t = Math.abs(t);
+//   console.log(t);
+//   if(t > lastScroll){
+//     //scroll down
+//     // console.log("scroll down");
+//     lastScroll = t;
+//     if(t < 10){
+//       //scroll to moon
+//       window.scrollTo({
+//         top: 990,
+//         behavior: "smooth",
+//       });
+//       // camera.lookAt(moon.position);
+//     }
+//   } else {
+//     //scroll up
+//     // console.log("scroll up");
+//     if(t < 1000 && t > 900){
+//       window.scrollTo({
+//       top: 0,
+//       behavior: "smooth",
+//       });
+
+//     }
+//     lastScroll = t;
+//   }
+// }
