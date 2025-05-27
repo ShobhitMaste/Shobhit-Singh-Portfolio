@@ -7,8 +7,8 @@ import { EffectComposer } from "/node_modules/three/examples/jsm/postprocessing/
 import { RenderPass } from "/node_modules/three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "/node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { nodeProxy } from "three/src/nodes/TSL.js";
 const canvas = document.getElementById("bg");
-import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 
 
 
@@ -91,7 +91,7 @@ scene.add(moon);
 // smartphone.position.x += -0.1;
 //   smartphone.position.y += 2.66;
 //   smartphone.position.z -= 1.5;
-
+var smartphoneZrotation;
 //phone 
 const loader = new GLTFLoader();
 var smartphone;
@@ -101,6 +101,7 @@ loader.load('models/newSmartphone.glb', (gltf) => {
   smartphone.rotation.z -= aspect >= 1.95? 0.155: 0.198;
   // smartphone.rotation.x -= -0.04;
   smartphone.position.set(100, 100, -400);
+  smartphoneZrotation = smartphone.rotation.z;
   scene.add(smartphone);
 }, undefined, (err)=>{
   console.log(err);
@@ -178,7 +179,8 @@ window.addEventListener(
 
 
 var once = true;
-
+var finalPhonepos;
+var finalMoonpos;
 function animate() {
   // console.log(camera.position)
   
@@ -186,10 +188,9 @@ function animate() {
   let t = document.body.getBoundingClientRect().top;
   camera.position.z = t * 0.3;
   camera.rotation.z = t * 0.0002;
-  console.log(camera.fov);
+  // console.log(camera.fov);
   sun.rotation.x += 0.0001;
   sun.rotation.y += 0.0002;
-
   if(smartphone){
     
     if(currentSection == 1 && once == true){
@@ -214,11 +215,136 @@ function animate() {
 
       setTimeout(() => {
         once = false;
+        finalPhonepos = smartphone.position;
+        finalMoonpos = moon.position;
       }, 2000);
-      
-      // moon.position.lerp(moonPos, 0.05);
+    
     } 
-    // else {
+      
+    if(smartphone && currentSection  == 1){
+      if(phoneFullscreen == true){
+        if(aspect >= 1.95)
+          smartphone.rotation.z = smartphone.rotation.z + ((-(Math.PI / 2) - 0.155) - smartphone.rotation.z) * 0.04;     //magic happening here 
+        else 
+          smartphone.rotation.z = smartphone.rotation.z + ((-(Math.PI / 2) - 0.191) - smartphone.rotation.z) * 0.04;     //magic happening here 
+
+        //smartphone moving
+        const dir = new THREE.Vector3();
+        camera.getWorldDirection(dir);
+        const phonePos = new THREE.Vector3();
+        phonePos.copy(camera.position).add(dir.multiplyScalar(2));
+        phonePos.x += -1.8;
+        phonePos.y += 0.3;
+        phonePos.z += 1;
+        smartphone.position.lerp(phonePos, 0.05);
+      } 
+      
+      else if(nophonefullscreen){
+        smartphone.rotation.z = smartphone.rotation.z + (smartphoneZrotation - smartphone.rotation.z) * 0.04
+        // smartphone.rotation.z = smartphoneZrotation;
+
+        const targetPos = new THREE.Vector3(
+        moon.position.x + 0.3,
+        moon.position.y + 2.701,
+        moon.position.z - 1.3
+        );
+
+        smartphone.position.lerp(targetPos, 0.05);
+      }
+
+    }
+    
+  }
+  
+  bloomComposer.render();
+}
+
+animate();
+
+let horizontalPhoneDOM = document.getElementById("horizontalPhoneScreen");
+
+
+let phoneFullscreen = false;
+let nophonefullscreen = false;
+
+function PhoneFullscreenModeSwitch(){
+  if((!phoneFullscreen && !nophonefullscreen) || (!phoneFullscreen && nophonefullscreen)){
+    phoneFullscreen = true;
+    nophonefullscreen = false;
+    document.getElementById("moonContent").classList.add("hidden");
+    document.getElementById("horizontalPhoneScreen").classList.remove("hidden");
+    setTimeout(() => {
+        document.getElementById("moonContent").classList.add("displayHide");
+        document.getElementById("horizontalPhoneScreen").classList.remove("displayHide");
+    }, 500);
+
+    //loading screen
+    setTimeout(() => {
+      document.getElementById("loading").classList.add("hidden");
+    }, 1800);
+    setTimeout(() => {
+      document.getElementById("loading").style.display = "none" ;
+      document.getElementById("screenContent").classList.remove("displayHide");
+      document.querySelector(".curtains").classList.remove ("displayHide");
+    }, 2400);
+    setTimeout(() => {
+      document.querySelector(".rightHalf").classList.add("hoverRight");
+      document.querySelector(".leftHalf").classList.add("hoverLeft");
+    }, 2600);
+    setTimeout(() => {
+      document.querySelector(".curtains").style.display = "none";
+      // document.querySelector(".leftHalf").classList.add("displayHide");
+    }, 3600);
+//loading end here
+
+  } else {
+    phoneFullscreen = false;
+    nophonefullscreen = true;
+    document.getElementById("moonContent").classList.remove("hidden");
+    // document.getElementById("horizontalPhoneScreen").classList.add("hidden");
+    document.getElementById("horizontalPhoneScreen").classList.add("displayHide");
+    setTimeout(() => {
+      document.getElementById("moonContent").classList.remove("displayHide");
+    }, 500);
+  }
+}
+window.PhoneFullscreenModeSwitch = PhoneFullscreenModeSwitch;
+
+
+function getScreenPosition (object3D, camera) {
+  let vector = new THREE.Vector3();
+  let canva = renderer.domElement;
+
+  vector.copy(object3D.position);
+  vector.project(camera);
+
+  return {
+    x: (vector.x + 1) / 2 * canva.clientWidth,
+    y: (-vector.y + 1) / 2 * canva.clientHeight
+  };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// else {
     //   setTimeout(() => {
     //     const hiddenPos = new THREE.Vector3(100, 100, -600);
     //     smartphone.position.lerp(hiddenPos, 0.05);
@@ -227,39 +353,6 @@ function animate() {
     //     moon.position.lerp(hiddenPosMoon, 0.05);
     //   }, 300);
     // }
-  }
-
-  // renderer.render( scene, camera );
-  // moon.rotation.x += 0.0004;
-  bloomComposer.render();
-  
-  
-//   moon.rotation.x += 0.005;
-// moon.rotation.y += 0.004;
-}
-animate();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
