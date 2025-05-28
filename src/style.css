@@ -1,5 +1,6 @@
 html{
     overflow-x:hidden ;
+    
 }
 
 canvas{
@@ -100,15 +101,82 @@ background-color: red;
   left:0;
 }
 
+.fullHeight{
+  height: 100%;
+}
+
 #screenContent{
   position: absolute;
-  background-color: rgb(1, 125, 178);
+  background-color: rgb(31, 17, 49);
+  /* z-index: 5; */
+  width: 100%;
+  height: 100%;
+  top:0;
+  left:0;
+
+  /* this causes issues */
+  /* display: grid;
+  grid-template-rows: repeat(12, 1fr);
+  grid-template-columns: repeat(12, 1fr); */
+}
+
+.content{
+   position: absolute;
+  background-color: rgb(31, 17, 49);
   /* z-index: 5; */
   width: 100%;
   height: 100%;
   top:0;
   left:0;
 }
+
+.screenContentBody{
+  background-color: rgb(31, 17, 49);
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(12, 1fr);
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.flex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-col{
+  flex-direction: column;
+}
+
+#exit{
+  grid-area: 1/12/2/13;
+}
+
+#extra{
+  position: relative;
+}
+#links{
+    grid-area:6/4/7/10;
+}
+
+.screenHeading{
+  grid-area: 4/5/6/9;
+}
+.space-between{
+  justify-content: space-evenly;
+}
+#links p{
+  font-size: 20px;
+  transition: transform 0.3s ease-out;
+}
+#links p:hover{
+  transform: scale(1.2);
+  text-decoration:underline;
+  /* transition: scale 0.2s ease-in-out; */
+  cursor:pointer;
+}
+
 
 
 
@@ -147,4 +215,28 @@ background-color: red;
   66.67% {background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5) 100%,calc(5*100%/5)   0%}
   83.33% {background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5)   0%,calc(5*100%/5)   0%}
   100%   {background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5)   0%,calc(5*100%/5) 100%}
+}
+
+.space-mono-regular {
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.space-mono-bold {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.space-mono-regular-italic {
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.space-mono-bold-italic {
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-style: italic;
 }
