@@ -6,6 +6,9 @@
   <title>Portfolio</title>
   <link rel="stylesheet" href="./src/style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -13,7 +16,7 @@
 
   <canvas id="bg"></canvas>
 
-  <main>
+  <main class="space-mono-regular">
     <section id="sun" class="scroll-section">
       TEst
     </section>
@@ -25,7 +28,7 @@
           <div class="offset-6 col-6">
             <h1 >Heading</h1>
             <div>
-              <h3>Enter the experiance</h3>
+              <h3>Enter the experience</h3>
               <button onclick="PhoneFullscreenModeSwitch()">Enter</button>
             </div>
           </div>
@@ -57,16 +60,27 @@
         </div>
 
         <div id="screenContent" class="displayHide">
-          <h1>you are not gay</h1>
-
-          <div class="row displayHide">
-            <div class="offset-11 col-1">
+          <div class="screenContentBody">
+            <div class="screenHeading flex-col flex">
+              <h1>Shobhit Singh's</h1>
+              <h2>Showcase 2025</h2>
+            </div>
+            <div class="flex" id="exit">
               <svg style="cursor:pointer" onclick="PhoneFullscreenModeSwitch()" fill="#ffffff" viewBox="0 0 16 16" height="30" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12.207 9H5V7h7.136L11.05 5.914 12.464 4.5 16 8.036l-3.536 3.535-1.414-1.414L12.207 9zM10 4H8V2H2v12h6v-2h2v4H0V0h10v4z" fill-rule="evenodd"></path> </g></svg>
             </div>
+            <div id="links">
+              <div class="flex space-between pt-4 space-mono-bold">
+                <p id="home">Home</p>
+                <p id="about">About</p>
+                <p id="experience">Experience</p>
+                <p id="project">Projects</p>
+                <p id="contact">Contact Me</p>
+              </div>
+            </div>
           </div>
-
-
         </div>
+
+
       </div>
 
 
@@ -77,6 +91,48 @@
 
     <section id="extra" class="scroll-section">
       extra
+
+<!-- copy from here -->
+
+      <!-- home -->
+        <div id="screenContent">
+          <div id="homeSection" class="fullHeight">
+            <div class="screenContentBody">
+              <div class="screenHeading flex-col flex">
+                <h1 class="space-mono-bold">Shobhit Singh's</h1>
+                <h2 class="">Showcase 2025</h2>
+              </div>
+              <div class="flex" id="exit">
+                <svg style="cursor:pointer" onclick="PhoneFullscreenModeSwitch()" fill="#ffffff" viewBox="0 0 16 16" height="30" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12.207 9H5V7h7.136L11.05 5.914 12.464 4.5 16 8.036l-3.536 3.535-1.414-1.414L12.207 9zM10 4H8V2H2v12h6v-2h2v4H0V0h10v4z" fill-rule="evenodd"></path> </g></svg>
+              </div>
+              <div id="links">
+                <div class="flex space-between pt-4 space-mono-regular">
+                  <p id="home" onclick="changeScene('homeSection')">Home</p>
+                  <p id="about" onclick="changeScene('aboutSection')">About</p>
+                  <p id="experience" onclick="changeScene('experienceSection')">Experience</p>
+                  <p id="project" onclick="changeScene('projectSection')">Projects</p>
+                  <p id="contact" onclick="changeScene('contactSection')">Contact Me</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- about -->
+          <div id="aboutSection" class="displayHide fullHeight">
+            <h1>about</h1>
+            <div class="screenContentBody">
+              s
+            </div>
+          </div>
+
+          
+        </div>
+
+      
+<!-- tille here -->
+
+
     </section>
   </main>
 

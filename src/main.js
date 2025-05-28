@@ -324,6 +324,21 @@ function getScreenPosition (object3D, camera) {
   };
 };
 
+let home = document.getElementById("homeSection");
+let about = document.getElementById("aboutSection");
+let experience = document.getElementById("experienceSection");
+let project = document.getElementById("projectSection");
+let contact = document.getElementById("contactSection");
+
+let currentScene = home;
+function changeScene(to){
+  console.log(to);
+  currentScene.classList.add("displayHide");
+  document.getElementById(to).classList.remove("displayHide");
+}
+
+window.changeScene = changeScene
+
 
 
 
