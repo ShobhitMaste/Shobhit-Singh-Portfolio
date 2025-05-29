@@ -111,21 +111,34 @@ loader.load('models/newSmartphone.glb', (gltf) => {
 let currentSection = 0;
 const totalSections = 3;
 var lastSection = 0;
+var smartphoneMode = false;  //remember to turn it true
+
+  document.querySelectorAll(".body").forEach((el) => {
+    el.addEventListener("wheel", (e) => {
+    e.stopPropagation();
+    console.log("body scroll");
+    })
+  })
 
   window.addEventListener('wheel', (e) => {
+    // console.log(e);
     e.preventDefault();
-    lastSection = currentSection;
-    if (e.deltaY > 0 && currentSection < totalSections - 1) {
-      currentSection++;
-    } else if (e.deltaY < 0 && currentSection > 0) {
-      currentSection--;
-    }
-    // console.log(lastSection, currentSection);
+    if(!smartphoneMode){
+      lastSection = currentSection;
+      if (e.deltaY > 0 && currentSection < totalSections - 1) {
+        currentSection++;
+      } else if (e.deltaY < 0 && currentSection > 0) {
+        currentSection--;
+      }
+      // console.log(lastSection, currentSection);
+  
+      window.scrollTo({
+        top: currentSection * window.innerHeight,
+        behavior: 'smooth'
+      });
 
-    window.scrollTo({
-      top: currentSection * window.innerHeight,
-      behavior: 'smooth'
-    });
+    }
+      
   }, { passive: false });
 
 
@@ -269,6 +282,7 @@ let nophonefullscreen = false;
 
 function PhoneFullscreenModeSwitch(){
   if((!phoneFullscreen && !nophonefullscreen) || (!phoneFullscreen && nophonefullscreen)){
+    smartphoneMode = true;
     phoneFullscreen = true;
     nophonefullscreen = false;
     document.getElementById("moonContent").classList.add("hidden");
@@ -298,6 +312,7 @@ function PhoneFullscreenModeSwitch(){
 //loading end here
 
   } else {
+    smartphoneMode = false;
     phoneFullscreen = false;
     nophonefullscreen = true;
     document.getElementById("moonContent").classList.remove("hidden");
@@ -324,17 +339,19 @@ function getScreenPosition (object3D, camera) {
   };
 };
 
-let home = document.getElementById("homeSection");
-let about = document.getElementById("aboutSection");
-let experience = document.getElementById("experienceSection");
-let project = document.getElementById("projectSection");
-let contact = document.getElementById("contactSection");
+let homeSection = document.getElementById("homeSection");
+let aboutSection = document.getElementById("aboutSection");
+let experienceSection = document.getElementById("experienceSection");
+let projectSection = document.getElementById("projectSection");
+let contactSection = document.getElementById("contactSection");
 
-let currentScene = home;
+let currentScene = homeSection;
 function changeScene(to){
   console.log(to);
   currentScene.classList.add("displayHide");
-  document.getElementById(to).classList.remove("displayHide");
+  currentScene = document.getElementById(to);
+  currentScene.classList.remove("displayHide");
+  
 }
 
 window.changeScene = changeScene

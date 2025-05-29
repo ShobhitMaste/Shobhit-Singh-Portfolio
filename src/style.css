@@ -59,6 +59,17 @@ html{
   height: 100%;
 }
 
+.flex-left{
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start; 
+  height: 100%;
+}
+
+.bold{
+  font-weight: 600;
+}
+
 #test{
 background-color: red;
 }
@@ -113,7 +124,7 @@ background-color: red;
   height: 100%;
   top:0;
   left:0;
-
+  
   /* this causes issues */
   /* display: grid;
   grid-template-rows: repeat(12, 1fr);
@@ -176,6 +187,145 @@ background-color: red;
   /* transition: scale 0.2s ease-in-out; */
   cursor:pointer;
 }
+
+.title{
+  grid-area: 2/2/4/5;
+}
+
+.normalText{
+  font-size: 20px;
+}
+
+.sidebar{
+  grid-area: 6/2/9/4;
+}
+
+.link{
+  cursor: pointer;
+  transition: transform 0.3s ease-out;
+}
+.link:hover{
+  transform: scale(1.1);
+  text-decoration:underline;
+}
+
+.flex-start{
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap:20px;
+}
+
+.big{
+  font-size: 70px;
+}
+
+.bodyHeader{
+  grid-area: 2/5/4/10;
+}
+
+.body{
+  grid-area:5/5/12/12;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+  padding-right: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 20px;
+  transition: scale 0.3s ease;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;  
+}
+.body:hover {
+  scale : 1.02;
+}
+
+.text-justify{
+  text-align: justify;
+}
+.example {
+  overflow-y: scroll;
+}
+
+
+.example::-webkit-scrollbar {
+    display: none;
+}
+
+.example {
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+
+.exitButton{
+  grid-area: 2/11/3/12;
+  
+}
+.exitAnim{
+transition: transform 0.1s ease-in;
+}
+.exitAnim:hover{
+  transform: scale(1.1);
+}
+
+.gap{
+  gap:30px;
+}
+
+.header{
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.marginzero{
+  margin: 0;
+}
+
+.socials{
+  transition: transform 0.3s ease-in-out;
+}
+.socials:hover{
+  transform: scale(1.2) rotate(360deg); 
+}
+
+.contactPage input{
+  background-color: rgb(31, 17, 49);
+  border-radius: 4px;
+  border:0px;
+  height:40px;
+  margin:10px 0px 10px 0px;
+  width: 90%;
+  color:#E8F0FE;
+}
+textarea{
+  background-color: rgb(31, 17, 49);
+  border-radius: 4px;
+  border:0px;
+  width: 90%;
+  color:#E8F0FE;
+}
+
+.contactSubmit{
+  border-radius: 5px;
+  border: 0px;
+  margin-top: 20px;
+}
+
+.flex-spaceapart{
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+  width: 90%;
+}
+
+
+
+
+
+
+
 
 
 
