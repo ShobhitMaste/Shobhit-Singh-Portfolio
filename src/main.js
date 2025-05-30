@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import Geometries from "three/src/renderers/common/Geometries.js";
 import { cameraFar, modelPosition, threshold } from "three/tsl";
-import { DirectionalLight } from "three/webgpu";
+import { DirectionalLight, Vector2 } from "three/webgpu";
 import { EffectComposer } from "/node_modules/three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "/node_modules/three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "/node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js";
@@ -109,16 +109,23 @@ loader.load('models/newSmartphone.glb', (gltf) => {
 // gltf.scene.position.set(0, 0, 0);
 
 
-var buzz;
-loader.load('models/buzz_rig.glb', (gltf) => {
-  buzz = gltf.scene;
-  buzz.position.set(0, -1, -2);
-  scene.add(buzz);
+var amongus;
+loader.load('models/amongus.glb', (gltf) => {
+  amongus = gltf.scene;
+  amongus.position.set(0, 0, -10);
+  scene.add(amongus);
 }, undefined, (err) => {
   console.log(err);
 });
 
-
+let mouse = new Vector2();
+document.addEventListener('pointermove', event => {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  // console.log(mouseX, mouseY);
+});
+const rayCaster = new THREE.Raycaster();
+const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 2)
 
 let currentSection = 0;
 const totalSections = 3;
@@ -222,6 +229,21 @@ function animate() {
   // console.log(camera.fov);
   sun.rotation.x += 0.0001;
   sun.rotation.y += 0.0002;
+  if(amongus){
+    rayCaster.setFromCamera(mouse, camera);
+    const targetPoint = new THREE.Vector3();
+    rayCaster.ray.intersectPlane(plane, targetPoint);
+
+    // Optionally smooth the movement
+    amongus.position.lerp(targetPoint, 0.1);
+    // amongus.rotation.x += mouse.y * 0.1;
+    // amongus.rotation.y += mouse.x * 0.1;
+    // amongus.rotation.z += 0.01;
+    amongus.rotation.x += (mouse.x - amongus.rotation.x) * 0.1;
+    amongus.rotation.y += (mouse.y - amongus.rotation.y) * 0.1;
+    amongus.rotation.z += 0.01;
+
+  }
   if(smartphone){
     
     if(currentSection == 1 && once == true){
@@ -347,7 +369,7 @@ window.PhoneFullscreenModeSwitch = PhoneFullscreenModeSwitch;
 function getScreenPosition (object3D, camera) {
   let vector = new THREE.Vector3();
   let canva = renderer.domElement;
-
+  renderer.domElement.style.transform = `translateX(-50%) translateY(-50%)`;
   vector.copy(object3D.position);
   vector.project(camera);
 
