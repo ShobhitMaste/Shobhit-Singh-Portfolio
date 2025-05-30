@@ -9,16 +9,24 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 </head>
 
-<body class="">
+<body>
 
 
   <canvas id="bg"></canvas>
 
   <main class="space-mono-regular">
     <section id="sun" class="scroll-section">
-      TEst
+      <div class="container landingPage">
+        <div class="MainTitle">
+          <h1 class="mt-5 anton-regular maintitle">I'm Shobhit Singh</h1>
+          <h2 class="mt-5 anton-regular ">Computer Science Student | AI/ML Enthusiast | Web Developer</h2>
+        </div>
+      </div>
     </section>
 
     <section id="moon" class="scroll-section">
@@ -88,8 +96,8 @@
           <!-- about -->
           <div id="aboutSection" class="fullHeight displayHide">
             <div class="screenContentBody">
-              <div class="exitButton exitAnim">
-                <div class="flex gap" onclick="PhoneFullscreenModeSwitch()" style="cursor:pointer;">
+              <div class="exitButton">
+                <div class="flex gap exitAnim" onclick="PhoneFullscreenModeSwitch()" style="cursor:pointer;">
                   <h3 class="marginzero">EXIT</h3>
                   <svg fill="#ffffff" viewBox="0 0 16 16" height="30" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12.207 9H5V7h7.136L11.05 5.914 12.464 4.5 16 8.036l-3.536 3.535-1.414-1.414L12.207 9zM10 4H8V2H2v12h6v-2h2v4H0V0h10v4z" fill-rule="evenodd"/>
@@ -185,8 +193,8 @@
 
           <div id="experienceSection" class="fullHeight displayHide">
             <div class="screenContentBody">
-              <div class="exitButton exitAnim">
-                <div class="flex gap" onclick="PhoneFullscreenModeSwitch()" style="cursor:pointer;">
+              <div class="exitButton">
+                <div class="flex gap exitAnim" onclick="PhoneFullscreenModeSwitch()" style="cursor:pointer;">
                   <h3 class="marginzero">EXIT</h3>
                   <svg fill="#ffffff" viewBox="0 0 16 16" height="30" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12.207 9H5V7h7.136L11.05 5.914 12.464 4.5 16 8.036l-3.536 3.535-1.414-1.414L12.207 9zM10 4H8V2H2v12h6v-2h2v4H0V0h10v4z" fill-rule="evenodd"/>
@@ -225,8 +233,8 @@
 
           <div id="projectSection" class="fullHeight displayHide">
             <div class="screenContentBody">
-              <div class="exitButton exitAnim">
-                <div class="flex gap" onclick="PhoneFullscreenModeSwitch()" style="cursor:pointer;">
+              <div class="exitButton">
+                <div class="flex gap exitAnim" onclick="PhoneFullscreenModeSwitch()" style="cursor:pointer;">
                   <h3 class="marginzero">EXIT</h3>
                   <svg fill="#ffffff" viewBox="0 0 16 16" height="30" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12.207 9H5V7h7.136L11.05 5.914 12.464 4.5 16 8.036l-3.536 3.535-1.414-1.414L12.207 9zM10 4H8V2H2v12h6v-2h2v4H0V0h10v4z" fill-rule="evenodd"/>
@@ -275,7 +283,7 @@
                   management and authentication, it offers a seamless blogging experience.
                 </p>
                 <div class="video">
-                  <video class="ms-4" style="float:right;" src="./projects/bloggify.mp4" height="250" autoplay loop></video>
+                  <video preload="auto" type="video/mp4" muted playsinline class="ms-4" style="float:right;" src="./projects/bloggify.mp4" height="250" autoplay loop></video>
                 </div>
                 <p>Experience the application live: <a  target="_blank" href="https://bloggify-qk8k.onrender.com">HERE</a></p>
                 <p class="header">Technologies Used - </p>
@@ -300,7 +308,7 @@
                 </p>
                 <p class="header">Technologies Used - </p>
                 <ul>
-                  <video class="ms-4" style="float:right;" src="./projects/askmyai.mp4" height="250" autoplay loop></video>
+                  <video preload="auto" type="video/mp4" muted playsinline class="ms-4" style="float:right;" src="./projects/askmyai.mp4" height="250" autoplay loop></video>
                   <li>Frontend: HTML5, CSS3, Vanilla JavaScript (Chrome Extension)</li>
                   <li>Backend: Node.js, Express.js, Firebase Cloud Functions</li>
                   <li>Database: MongoDB (Mongoose)</li>
@@ -325,7 +333,7 @@
                 </p>
                 <p class="header">Technologies Used - </p>
                 <ul>
-                  <video class="ms-4" style="float:right;" src="./projects/portfolio.mp4" height="250" autoplay loop></video>
+                  <video preload="auto" type="video/mp4" muted playsinline class="ms-4" style="float:right;" src="./projects/portfolio.mp4" height="250" autoplay loop></video>
                   <li>Frontend: HTML5, CSS3, Vanilla JavaScript, THREE JS</li>
                   <li>Design/UI - Bootstrap 5, Google Fonts, Custom SVGs / Icons</li>
                   <li>Math/Logic - 3D Geometry & Vector Math, Event Handling</li>
@@ -345,7 +353,7 @@
 
           <div id="contactSection" class="fullHeight displayHide">
             <div class="screenContentBody">
-              <div class="exitButton exitAnim" >
+              <div class="exitButton" >
                 <div class="flex gap exitAnim" onclick="PhoneFullscreenModeSwitch()" style="cursor:pointer;">
                   <h3 class="marginzero">EXIT</h3>
                   <svg  fill="#ffffff" viewBox="0 0 16 16" height="30" xmlns="http://www.w3.org/2000/svg">
@@ -403,10 +411,10 @@
                       <input type="email" name="email" required placeholder="Email">
                       <label for="message">Message: </label>
                       <textarea class="mt-2" placeholder="Your Message" name="message" rows="10" required></textarea>
-                      <div class="flex-spaceapart">
+                      <div class="flex-spaceapart mt-4">
                         <button class="contactSubmit" type="submit">Send Message</button>
                         <div>
-                          <p>All Messages are forwarded to my email.</p>
+                          <p style="margin:0">All Messages are forwarded to my email.</p>
                         </div>
                       </div>
                     </div>

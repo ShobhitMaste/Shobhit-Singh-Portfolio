@@ -7,7 +7,7 @@ import { EffectComposer } from "/node_modules/three/examples/jsm/postprocessing/
 import { RenderPass } from "/node_modules/three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "/node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { nodeProxy } from "three/src/nodes/TSL.js";
+import { mx_fractal_noise_float, nodeProxy } from "three/src/nodes/TSL.js";
 const canvas = document.getElementById("bg");
 
 
@@ -108,10 +108,23 @@ loader.load('models/newSmartphone.glb', (gltf) => {
 });
 // gltf.scene.position.set(0, 0, 0);
 
+
+var buzz;
+loader.load('models/buzz_rig.glb', (gltf) => {
+  buzz = gltf.scene;
+  buzz.position.set(0, -1, -2);
+  scene.add(buzz);
+}, undefined, (err) => {
+  console.log(err);
+});
+
+
+
 let currentSection = 0;
 const totalSections = 3;
 var lastSection = 0;
 var smartphoneMode = false;  //remember to turn it true
+var timerStarted = false;
 
   document.querySelectorAll(".body").forEach((el) => {
     el.addEventListener("wheel", (e) => {
@@ -121,9 +134,10 @@ var smartphoneMode = false;  //remember to turn it true
   })
 
   window.addEventListener('wheel', (e) => {
-    // console.log(e);
+    console.log(e);
     e.preventDefault();
-    if(!smartphoneMode){
+    if(!smartphoneMode && timerStarted == false){
+      timerStarted = true;
       lastSection = currentSection;
       if (e.deltaY > 0 && currentSection < totalSections - 1) {
         currentSection++;
@@ -137,7 +151,11 @@ var smartphoneMode = false;  //remember to turn it true
         behavior: 'smooth'
       });
 
+      setTimeout(()=> {
+        timerStarted = false;
+      }, 700);
     }
+
       
   }, { passive: false });
 

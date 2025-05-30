@@ -35,6 +35,26 @@ html{
     scrollbar-color: #333 #444; 
 }
 
+.landingPage{
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+  grid-template-columns: repeat(10, 1fr);
+  height:100%;
+}
+
+.MainTitle{
+  grid-area: 2/1/4/9;
+  
+}
+
+.maintitle{
+font-size: 80px;
+margin: 0;
+padding: 0;;
+}
+
+
+
 #screen{
   background-color: white;
   position: relative;
@@ -310,7 +330,6 @@ textarea{
 .contactSubmit{
   border-radius: 5px;
   border: 0px;
-  margin-top: 20px;
 }
 
 .flex-spaceapart{
@@ -389,4 +408,9 @@ textarea{
   font-family: "Space Mono", monospace;
   font-weight: 700;
   font-style: italic;
+}
+.anton-regular {
+  font-family: "Anton", sans-serif;
+  font-weight: 500;
+  font-style: normal;
 }
