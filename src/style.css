@@ -53,6 +53,40 @@ margin: 0;
 padding: 0;;
 }
 
+.smallHero{
+  font-size: 55px;
+  background-image: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+  color: transparent;
+  background-clip: text;
+  
+}
+.heroContacts{
+  grid-area: 6/1/7/6;
+}
+.flex-left2{
+  width:100%;
+  height:100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center; 
+  gap:20px;
+}
+.clickAnimations{
+  cursor:pointer;
+  color:white;
+  transition: transform 0.2s ease-in-out;
+}
+.clickAnimations:hover{
+  transform: scale(1.2);
+}
+
+.textLink{
+  color:blue;
+  cursor:pointer;
+}
+.textLink:hover{
+  text-decoration: underline;
+}
 
 
 #screen{
@@ -244,6 +278,10 @@ background-color: red;
   grid-area: 2/5/4/10;
 }
 
+.nonscrollabelbody{
+  pointer-events: none;
+}
+
 .body{
   grid-area:5/5/12/12;
   overflow-y: scroll;
@@ -339,10 +377,41 @@ textarea{
   width: 90%;
 }
 
+.test{
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+  grid-template-columns: repeat(10, 1fr);
+  height:100vh;
+}
 
-
-
-
+.moonHead{
+  grid-area: 2/6/4/10;
+}
+.moonHead button{
+  border:0;
+  height:50px;
+  width:150px;
+  border-radius: 5px;
+  font-size: 24px;
+}
+.techStack{
+  grid-area:5/6/9/10;
+  
+}
+.techIcons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10%;
+}
+.techIcons img{
+  background-color: transparent;
+}
+.border{
+  border-radius: 10px;
+  background: rgba(36, 36, 36, 0.2);
+  border :2px solid white;
+}
 
 
 

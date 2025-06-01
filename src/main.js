@@ -8,6 +8,16 @@ import { RenderPass } from "/node_modules/three/examples/jsm/postprocessing/Rend
 import { UnrealBloomPass } from "/node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { mx_fractal_noise_float, nodeProxy } from "three/src/nodes/TSL.js";
+import { FontLoader, TextGeometry } from "three/examples/jsm/Addons.js";
+import * as RAPIER from '@dimforge/rapier3d-compat';
+import { mx_bilerp_0 } from "three/src/nodes/materialx/lib/mx_noise.js";
+
+
+await RAPIER.init() // This line is only needed if using the compat version
+const gravity = new RAPIER.Vector3(0.0, 0, 0.0)
+const world = new RAPIER.World(gravity)
+const dynamicBodies = []
+
 const canvas = document.getElementById("bg");
 
 
@@ -41,9 +51,9 @@ bloomComposer.addPass(bloomPass);
 
 //stars
 function addStar(){
-  let x = THREE.MathUtils.randFloat(-250, 250);
-  let y = THREE.MathUtils.randFloat(-150, 150);
-  let z = THREE.MathUtils.randFloat(-300, -100);
+  let x = THREE.MathUtils.randFloat(-300, 300);
+  let y = THREE.MathUtils.randFloat(-200, 200);
+  let z = THREE.MathUtils.randFloat(-600, -100);
   const starGeometry = new THREE.SphereGeometry(0.26, 25, 25);
   const starMaterial = new THREE.MeshStandardMaterial( { color: 0xffffff } );
   const star = new THREE.Mesh( starGeometry, starMaterial );
@@ -51,7 +61,7 @@ function addStar(){
   scene.add(star);
 }
 
-Array(300).fill().forEach(addStar);
+Array(450).fill().forEach(addStar);
 
 //sun
 const sunTexture = new THREE.TextureLoader().load('./sun.png' ); 
@@ -80,7 +90,7 @@ const moon = new THREE.Mesh( moonGeometry, moonMaterial );
 var vh = window.innerHeight;
 var iw = window.innerWidth;
 var aspect = iw / vh;
-console.log(aspect);
+// console.log(aspect);
 console.log("vh - " + vh);
 // moon.position.set(-1.8, -3.6, -vh/3.318);
 moon.position.set(1000, 1000, -500);
@@ -108,12 +118,24 @@ loader.load('models/newSmartphone.glb', (gltf) => {
 });
 // gltf.scene.position.set(0, 0, 0);
 
-
-var amongus;
+//cursor
+var amongus, amongusCollider, amongusBody;
 loader.load('models/amongus.glb', (gltf) => {
   amongus = gltf.scene;
   amongus.position.set(0, 0, -10);
   scene.add(amongus);
+
+  amongusBody = world.createRigidBody(
+    RAPIER.RigidBodyDesc.kinematicPositionBased()
+      .setTranslation(amongus.position.x, amongus.position.y, amongus.position.z)
+  );
+
+  // 🧠 Create a box collider — adjust size to match your model
+  amongusCollider = world.createCollider(
+    RAPIER.ColliderDesc.cuboid(0.1, 0.1, 0.1).setRestitution(1),
+    amongusBody
+  );
+
 }, undefined, (err) => {
   console.log(err);
 });
@@ -124,8 +146,93 @@ document.addEventListener('pointermove', event => {
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   // console.log(mouseX, mouseY);
 });
+
 const rayCaster = new THREE.Raycaster();
 const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 2)
+//for cursor end here
+var string = `+------------------------------+
+|             WELCOME           |
+|          Scroll Down          |
++------------------------------+`
+const fontLoader = new FontLoader();
+fontLoader.load('./fonts/font2.json', function (font) {
+  const textGeometry = new TextGeometry(string, {
+    font: font,
+    size: 0.1,
+    height: 0.6,
+    curveSegments: 22,
+    bevelEnabled: true,
+    bevelThickness: 0.0001,
+    bevelSize: .0003,
+    bevelOffset: 0,
+    bevelSegments: 3,
+    depth:0.002,
+  });
+
+  const textMaterial = new THREE.MeshStandardMaterial({ color: 0xFDBB2D});
+  const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+  textMesh.position.set(0.44,0.35, -2);
+  scene.add(textMesh);
+  const box = new THREE.Box3().setFromObject(textMesh);
+  const size = new THREE.Vector3();
+  box.getSize(size);
+  const center = new THREE.Vector3();
+  box.getCenter(center);
+
+  const textBody = world.createRigidBody(
+    RAPIER.RigidBodyDesc.dynamic().setTranslation(center.x , center.y - 0.2, center.z ).setAdditionalMass(1000000).enabledTranslations(true, true, false)
+  );
+  const textShape = RAPIER.ColliderDesc.cuboid(size.x / 2 - 0.17, size.y / 2 - 0.07, size.z / 2).setTranslation(0.58,0,0).setRestitution(1);
+  world.createCollider(textShape, textBody);
+  
+  dynamicBodies.push([textMesh, textBody]);
+});
+
+
+const torusTexture = new THREE.TextureLoader().load('./grad.jpg');
+var pivot = new THREE.Object3D();
+const torusgeometry = new THREE.TorusGeometry( 0.3, 0.1, 12, 48 ); 
+const torusmaterial = new THREE.MeshStandardMaterial( { color: 0xcccccc, map:torusTexture } ); 
+const torus = new THREE.Mesh( torusgeometry, torusmaterial );
+pivot.add(torus);
+torus.position.set(2,1.5,0);
+scene.add(pivot);
+
+var rocket;
+loader.load('models/rocket.glb', (gltf) => {
+  rocket = gltf.scene;
+  rocket.traverse((child) => {
+    if (child.isMesh) {
+      child.layers.set(1); // Set to layer 1
+    }
+  });
+  // rocket.position.set(0, 0, -10);
+
+  pivot.add(rocket);
+  rocket.position.set(0, 0, 50);
+  rocket.rotation.x = 2.8;
+  rocket.rotation.y = 3;
+  rocket.rotation.z = 1.5;
+});
+
+camera.layers.enable(3);
+var laptop;
+loader.load('models/laptop.glb', (gltf) => {
+  laptop = gltf.scene;
+  laptop.position.set(0, -0.8, -8);
+  laptop.layers.set(2);
+  laptop.traverse(child => {
+    if (child.isMesh && child.material) {
+    child.material.emissive = new THREE.Color(0x000000);       // Disable glow
+    child.material.emissiveIntensity = 0;
+    child.material.metalness = 0.2;
+    child.material.roughness = 0.6;
+    child.material.needsUpdate = true;
+  }
+  });
+  // scene.add(laptop);
+});
+
 
 let currentSection = 0;
 const totalSections = 3;
@@ -136,12 +243,12 @@ var timerStarted = false;
   document.querySelectorAll(".body").forEach((el) => {
     el.addEventListener("wheel", (e) => {
     e.stopPropagation();
-    console.log("body scroll");
+    // console.log("body scroll");
     })
   })
 
   window.addEventListener('wheel', (e) => {
-    console.log(e);
+    // console.log(e);
     e.preventDefault();
     if(!smartphoneMode && timerStarted == false){
       timerStarted = true;
@@ -151,7 +258,7 @@ var timerStarted = false;
       } else if (e.deltaY < 0 && currentSection > 0) {
         currentSection--;
       }
-      // console.log(lastSection, currentSection);
+      console.log(lastSection, currentSection);
   
       window.scrollTo({
         top: currentSection * window.innerHeight,
@@ -177,8 +284,13 @@ scene.add(pointLight);
 
 
 
+
 const ambientLight = new THREE.AmbientLight(0xffffff);
 scene.add( ambientLight );
+
+const ambientLight2 = new THREE.AmbientLight(0x010101);
+ambientLight2.layers.set(1); 
+scene.add( ambientLight2 );
 
 
 //sunlight
@@ -222,6 +334,7 @@ var finalMoonpos;
 function animate() {
   // console.log(camera.position)
   
+  
   requestAnimationFrame( animate );
   let t = document.body.getBoundingClientRect().top;
   camera.position.z = t * 0.3;
@@ -229,23 +342,45 @@ function animate() {
   // console.log(camera.fov);
   sun.rotation.x += 0.0001;
   sun.rotation.y += 0.0002;
+  
+  world.step();
+
+  for (const [mesh, body] of dynamicBodies) {
+    const pos = body.translation();
+    const rot = body.rotation();
+    mesh.position.set(pos.x, pos.y, pos.z);
+  mesh.quaternion.set(rot.x, rot.y, rot.z, rot.w);
+  }
+
   if(amongus){
     rayCaster.setFromCamera(mouse, camera);
     const targetPoint = new THREE.Vector3();
     rayCaster.ray.intersectPlane(plane, targetPoint);
 
     // Optionally smooth the movement
-    amongus.position.lerp(targetPoint, 0.1);
-    // amongus.rotation.x += mouse.y * 0.1;
-    // amongus.rotation.y += mouse.x * 0.1;
-    // amongus.rotation.z += 0.01;
+    amongus.position.lerp(targetPoint, 0.01);
+    var x = amongus.position.x;
+    var y = amongus.position.y;
+    var z = amongus.position.z;
+    amongusBody.setNextKinematicTranslation({x,y,z});
+    // amongus.rotation.x += 0.001;
+    // amongus.rotation.y += 0.001;
+    amongus.rotation.z += Math.sin(60) * 0.006;
+    
     amongus.rotation.x += (mouse.x - amongus.rotation.x) * 0.1;
     amongus.rotation.y += (mouse.y - amongus.rotation.y) * 0.1;
-    amongus.rotation.z += 0.01;
+    // amongus.rotation.z += 0.003;
 
   }
   if(smartphone){
+
+    pivot.position.copy(smartphone.position);
     
+    pivot.rotation.y += 0.003;
+    torus.rotation.x += 0.006;
+    torus.rotation.y += 0.005;
+    torus.rotation.z += 0.005;
+
     if(currentSection == 1 && once == true){
       const targetPos = new THREE.Vector3(
         moon.position.x + 0.3,
@@ -253,9 +388,12 @@ function animate() {
         moon.position.z - 1.3
       );
 
+
       smartphone.position.lerp(targetPos, 0.05);   //used for animation
       
-      
+
+
+
       const dir = new THREE.Vector3();
       camera.getWorldDirection(dir);
       const moonPos = new THREE.Vector3();
@@ -290,6 +428,8 @@ function animate() {
         phonePos.y += 0.3;
         phonePos.z += 1;
         smartphone.position.lerp(phonePos, 0.05);
+
+        
       } 
       
       else if(nophonefullscreen){
@@ -308,9 +448,22 @@ function animate() {
     }
     
   }
-  
+
+  if(currentSection == 2){
+    const dir = new THREE.Vector3();
+    camera.getWorldDirection(dir);
+    const laptopPos = new THREE.Vector3();
+    laptopPos.copy(camera.position).add(dir.multiplyScalar(4));
+    laptop.lookAt(camera.position);
+    laptop.position.lerp(laptopPos, 0.05);
+    camera.rotation.x = 0;
+    camera.rotation.y = 0;
+    camera.rotation.z = 0;
+  }
+
   bloomComposer.render();
 }
+camera.layers.enable(1);
 
 animate();
 
@@ -387,7 +540,7 @@ let contactSection = document.getElementById("contactSection");
 
 let currentScene = homeSection;
 function changeScene(to){
-  console.log(to);
+  // console.log(to);
   currentScene.classList.add("displayHide");
   currentScene = document.getElementById(to);
   currentScene.classList.remove("displayHide");
