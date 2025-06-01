@@ -34,6 +34,8 @@ renderer.setClearColor(0x000000);
 camera.position.z = 10;
 
 
+
+
 // sun glow
 const renderScene = new RenderPass(scene, camera);
 const bloomPass = new UnrealBloomPass(
@@ -108,7 +110,7 @@ var smartphone;
 loader.load('models/newSmartphone.glb', (gltf) => {
   smartphone = gltf.scene;
   // smartphone.rotation.y -= -0.17;
-  smartphone.rotation.z -= aspect >= 1.95? 0.155: 0.198;
+  // smartphone.rotation.z -= aspect >= 1.95? 0.155: 0.198;
   // smartphone.rotation.x -= -0.04;
   smartphone.position.set(100, 100, -400);
   smartphoneZrotation = smartphone.rotation.z;
@@ -122,7 +124,7 @@ loader.load('models/newSmartphone.glb', (gltf) => {
 var amongus, amongusCollider, amongusBody;
 loader.load('models/amongus.glb', (gltf) => {
   amongus = gltf.scene;
-  amongus.position.set(0, 0, -10);
+  amongus.position.set(0, 0, -2);
   scene.add(amongus);
 
   amongusBody = world.createRigidBody(
@@ -215,22 +217,20 @@ loader.load('models/rocket.glb', (gltf) => {
   rocket.rotation.z = 1.5;
 });
 
-camera.layers.enable(3);
 var laptop;
-loader.load('models/laptop.glb', (gltf) => {
+loader.load('models/laptop2.glb', (gltf) => {
   laptop = gltf.scene;
-  laptop.position.set(0, -0.8, -8);
-  laptop.layers.set(2);
-  laptop.traverse(child => {
-    if (child.isMesh && child.material) {
-    child.material.emissive = new THREE.Color(0x000000);       // Disable glow
-    child.material.emissiveIntensity = 0;
-    child.material.metalness = 0.2;
-    child.material.roughness = 0.6;
-    child.material.needsUpdate = true;
-  }
-  });
-  // scene.add(laptop);
+  laptop.position.set(0, 300, -800)
+  // laptop.traverse(child => {
+  //   if (child.isMesh && child.material) {
+  //   child.material.emissive = new THREE.Color(0x000000);       // Disable glow
+  //   child.material.emissiveIntensity = 0;
+  //   child.material.metalness = 0.2;
+  //   child.material.roughness = 0.6;
+  //   child.material.needsUpdate = true;
+  // }
+  // });
+  scene.add(laptop);
 });
 
 
@@ -282,6 +282,10 @@ pointLight.position.y += 4;
 pointLight.position.z += -1.6;
 scene.add(pointLight);
 
+const pointLightLaptop = new THREE.PointLight(0xffffff, 10 , 100);
+pointLightLaptop.position.z = 2;
+scene.add(pointLightLaptop);
+
 
 
 
@@ -308,7 +312,7 @@ scene.add(sunlight);
 
 //helpers
 
-const lightHelper = new THREE.PointLightHelper(pointLight);
+const lightHelper = new THREE.PointLightHelper(pointLightLaptop);
 const gridHelper = new THREE.GridHelper(200, 300);
 
 // scene.add( lightHelper); 
@@ -331,6 +335,7 @@ window.addEventListener(
 var once = true;
 var finalPhonepos;
 var finalMoonpos;
+var onceForLaptop = true;
 function animate() {
   // console.log(camera.position)
   
@@ -338,7 +343,7 @@ function animate() {
   requestAnimationFrame( animate );
   let t = document.body.getBoundingClientRect().top;
   camera.position.z = t * 0.3;
-  camera.rotation.z = t * 0.0002;
+  // camera.rotation.z = t * 0.0002;
   // console.log(camera.fov);
   sun.rotation.x += 0.0001;
   sun.rotation.y += 0.0002;
@@ -383,7 +388,7 @@ function animate() {
 
     if(currentSection == 1 && once == true){
       const targetPos = new THREE.Vector3(
-        moon.position.x + 0.3,
+        moon.position.x + -0.1,
         moon.position.y + 2.701,
         moon.position.z - 1.3
       );
@@ -399,7 +404,7 @@ function animate() {
       const moonPos = new THREE.Vector3();
       moonPos.copy(camera.position).add(dir.multiplyScalar(6));
       moonPos.x += -2.6;
-      moonPos.y += -3.8;
+      moonPos.y += -4.2;
       moonPos.z += 4;
       moon.position.lerp(moonPos, 0.05);
       // smartphone.lookAt(camera.position);
@@ -410,14 +415,12 @@ function animate() {
         finalMoonpos = moon.position;
       }, 2000);
     
+    
     } 
       
     if(smartphone && currentSection  == 1){
       if(phoneFullscreen == true){
-        if(aspect >= 1.95)
-          smartphone.rotation.z = smartphone.rotation.z + ((-(Math.PI / 2) - 0.155) - smartphone.rotation.z) * 0.04;     //magic happening here 
-        else 
-          smartphone.rotation.z = smartphone.rotation.z + ((-(Math.PI / 2) - 0.191) - smartphone.rotation.z) * 0.04;     //magic happening here 
+        smartphone.rotation.z = smartphone.rotation.z + ((-(Math.PI / 2)) - smartphone.rotation.z) * 0.04;     //magic happening here 
 
         //smartphone moving
         const dir = new THREE.Vector3();
@@ -425,7 +428,7 @@ function animate() {
         const phonePos = new THREE.Vector3();
         phonePos.copy(camera.position).add(dir.multiplyScalar(2));
         phonePos.x += -1.8;
-        phonePos.y += 0.3;
+        phonePos.y += 0;
         phonePos.z += 1;
         smartphone.position.lerp(phonePos, 0.05);
 
@@ -449,16 +452,23 @@ function animate() {
     
   }
 
-  if(currentSection == 2){
+  if(currentSection == 2 && onceForLaptop){
     const dir = new THREE.Vector3();
     camera.getWorldDirection(dir);
     const laptopPos = new THREE.Vector3();
-    laptopPos.copy(camera.position).add(dir.multiplyScalar(4));
+    laptopPos.copy(camera.position).add(dir.multiplyScalar(0.18));
     laptop.lookAt(camera.position);
+    laptop.position.y = -0.08;
     laptop.position.lerp(laptopPos, 0.05);
-    camera.rotation.x = 0;
-    camera.rotation.y = 0;
-    camera.rotation.z = 0;
+    laptop.rotation.x = 0.18;
+    laptop.rotation.y = 0;
+    laptop.rotation.z = 0;
+    pointLightLaptop.position.lerp(laptop.position , 0.05);
+    pointLightLaptop.position.z += 0.1;
+    pointLightLaptop.position.y += 0.1;
+    setTimeout(() => {
+      onceForLaptop = false;
+    }, 2000)
   }
 
   bloomComposer.render();
