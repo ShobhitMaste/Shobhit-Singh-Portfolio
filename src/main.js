@@ -13,15 +13,17 @@ import * as RAPIER from '@dimforge/rapier3d-compat';
 import { mx_bilerp_0 } from "three/src/nodes/materialx/lib/mx_noise.js";
 import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 
-
-await RAPIER.init() // This line is only needed if using the compat version
-const gravity = new RAPIER.Vector3(0.0, 0, 0.0)
-const world = new RAPIER.World(gravity)
+let world;
+async function initRapier(){
+  await RAPIER.init() // This line is only needed if using the compat version
+  const gravity = new RAPIER.Vector3(0.0, 0, 0.0)
+  world = new RAPIER.World(gravity)
+}
 const dynamicBodies = []
 
+initRapier();
+
 const canvas = document.getElementById("bg");
-
-
 
 //settings
 const scene = new THREE.Scene();
@@ -250,7 +252,7 @@ const iframe = document.createElement( 'iframe' );
 iframe.style.width = '1128px';
 iframe.style.height = '645px';
 iframe.style.border = '0px';
-iframe.src = 'http://127.0.0.1:3000/iframes/test.html';
+iframe.src = 'https://shobhitmaste.github.io/portfolioSideMission/';
 div.appendChild( iframe );
 
 const screen = new CSS3DObject( div );
@@ -394,7 +396,8 @@ function animate() {
   sun.rotation.x += 0.0001;
   sun.rotation.y += 0.0002;
   
-  world.step();
+  if(world)
+    world.step();
 
   for (const [mesh, body] of dynamicBodies) {
     const pos = body.translation();
