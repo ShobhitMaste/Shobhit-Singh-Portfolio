@@ -384,7 +384,7 @@ var once = true;
 var finalPhonepos;
 var finalMoonpos;
 var onceForLaptop = true;
-const moonPos = new THREE.Vector3();
+const moonPos = new THREE.Vector3(0, 0, 100);
 
 
 
@@ -463,8 +463,8 @@ function animate() {
       }
       // smartphone.lookAt(camera.position);
     } 
-    
-    console.log(moonPos);
+    console.log(t, vh);
+    // console.log(moonPos);
 
     moon.position.lerp(moonPos, 0.05);
       
