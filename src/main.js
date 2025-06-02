@@ -384,6 +384,10 @@ var once = true;
 var finalPhonepos;
 var finalMoonpos;
 var onceForLaptop = true;
+const moonPos = new THREE.Vector3();
+
+
+
 function animate() {
   // console.log(camera.position)
   
@@ -398,7 +402,7 @@ function animate() {
   
   if(world)
     world.step();
-
+  
   for (const [mesh, body] of dynamicBodies) {
     const pos = body.translation();
     const rot = body.rotation();
@@ -435,35 +439,34 @@ function animate() {
     torus.rotation.y += 0.005;
     torus.rotation.z += 0.005;
 
-    if(currentSection == 1 && once == true){
-      const targetPos = new THREE.Vector3(
+    const targetPos = new THREE.Vector3(
         moon.position.x + -0.1,
         moon.position.y + 2.701,
         moon.position.z - 1.3
       );
 
 
-      smartphone.position.lerp(targetPos, 0.05);   //used for animation
+      smartphone.position.lerp(targetPos, 0.05);
+
+    if(currentSection == 1 && once == true){
+         //used for animation
       
-
-      const dir = new THREE.Vector3();
-      camera.getWorldDirection(dir);
-      const moonPos = new THREE.Vector3();
-      moonPos.copy(camera.position).add(dir.multiplyScalar(6));
-      moonPos.x += -2.6;
-      moonPos.y += -4.2;
-      moonPos.z += 4;
-      moon.position.lerp(moonPos, 0.05);
-      // smartphone.lookAt(camera.position);
-
-      setTimeout(() => {
+      if(-t == vh){
+        const dir = new THREE.Vector3();
+        camera.getWorldDirection(dir);
+        const cameraPosition = camera.position;
+        moonPos.copy(cameraPosition).add(dir.multiplyScalar(6));
+        moonPos.x += -2.6;
+        moonPos.y += -4.2;
+        moonPos.z += 4;
         once = false;
-        finalPhonepos = smartphone.position;
-        finalMoonpos = moon.position;
-      }, 2000);
-    
-    
+      }
+      // smartphone.lookAt(camera.position);
     } 
+    
+    console.log(moonPos);
+
+    moon.position.lerp(moonPos, 0.05);
       
     if(smartphone && currentSection  == 1){
       if(phoneFullscreen == true){
