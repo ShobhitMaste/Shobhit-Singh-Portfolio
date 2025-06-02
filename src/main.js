@@ -11,6 +11,7 @@ import { mx_fractal_noise_float, nodeProxy } from "three/src/nodes/TSL.js";
 import { FontLoader, TextGeometry } from "three/examples/jsm/Addons.js";
 import * as RAPIER from '@dimforge/rapier3d-compat';
 import { mx_bilerp_0 } from "three/src/nodes/materialx/lib/mx_noise.js";
+import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 
 
 await RAPIER.init() // This line is only needed if using the compat version
@@ -153,8 +154,8 @@ const rayCaster = new THREE.Raycaster();
 const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 2)
 //for cursor end here
 var string = `+------------------------------+
-|             WELCOME           |
-|          Scroll Down          |
+|    WELCOME STRANGER     |
+|          Scroll Down           |
 +------------------------------+`
 const fontLoader = new FontLoader();
 fontLoader.load('./fonts/font2.json', function (font) {
@@ -233,13 +234,41 @@ loader.load('models/laptop2.glb', (gltf) => {
   scene.add(laptop);
 });
 
+//testing
+
+const css3dRenderer = new CSS3DRenderer();
+css3dRenderer.setSize( window.innerWidth, window.innerHeight );
+document.getElementById("extra").appendChild( css3dRenderer.domElement );
+
+const div = document.createElement( 'div' );
+div.style.width = '1128px';
+div.style.height = '645px';
+div.style.backgroundColor = '#aaaaaa';
+div.style.transform = `scale(0.2)`;
+
+const iframe = document.createElement( 'iframe' );
+iframe.style.width = '1128px';
+iframe.style.height = '645px';
+iframe.style.border = '0px';
+iframe.src = 'http://127.0.0.1:3000/iframes/test.html';
+div.appendChild( iframe );
+
+const screen = new CSS3DObject( div );
+scene.add(screen);
+// screen.scale.set(0.2);
+screen.position.set(0,0, -100);
+screen.visible = false;
+
+//testing end
+
+
 
 let currentSection = 0;
 const totalSections = 3;
 var lastSection = 0;
 var smartphoneMode = false;  //remember to turn it true
 var timerStarted = false;
-
+var laptopInitiated = false;
   document.querySelectorAll(".body").forEach((el) => {
     el.addEventListener("wheel", (e) => {
     e.stopPropagation();
@@ -259,7 +288,23 @@ var timerStarted = false;
         currentSection--;
       }
       console.log(lastSection, currentSection);
-  
+      
+      if(currentSection == 1){
+      screen.visible = false;
+    }
+    else if(currentSection == 2){
+      if(laptopInitiated){
+        setTimeout(() => {
+          screen.visible = true;
+        }, 500);
+      } else {
+        laptopInitiated = true;
+        setTimeout(() => {
+          screen.visible = true;
+        }, 2000);
+      }
+    }
+
       window.scrollTo({
         top: currentSection * window.innerHeight,
         behavior: 'smooth'
@@ -397,8 +442,6 @@ function animate() {
       smartphone.position.lerp(targetPos, 0.05);   //used for animation
       
 
-
-
       const dir = new THREE.Vector3();
       camera.getWorldDirection(dir);
       const moonPos = new THREE.Vector3();
@@ -432,7 +475,6 @@ function animate() {
         phonePos.z += 1;
         smartphone.position.lerp(phonePos, 0.05);
 
-        
       } 
       
       else if(nophonefullscreen){
@@ -458,20 +500,30 @@ function animate() {
     const laptopPos = new THREE.Vector3();
     laptopPos.copy(camera.position).add(dir.multiplyScalar(0.18));
     laptop.lookAt(camera.position);
-    laptop.position.y = -0.08;
+    laptop.position.y = -0.09;
     laptop.position.lerp(laptopPos, 0.05);
-    laptop.rotation.x = 0.18;
+    laptop.rotation.x = 0;
     laptop.rotation.y = 0;
     laptop.rotation.z = 0;
+
+    screen.position.copy(laptop.position);
+    screen.quaternion.copy(laptop.quaternion);
+    screen.rotation.x = -0;
+    screen.position.x += 0;
+    screen.position.y += 70;
+    screen.position.z -= 800;
+  
     pointLightLaptop.position.lerp(laptop.position , 0.05);
     pointLightLaptop.position.z += 0.1;
     pointLightLaptop.position.y += 0.1;
     setTimeout(() => {
       onceForLaptop = false;
+      // screen.visible = true;
     }, 2000)
   }
 
   bloomComposer.render();
+  css3dRenderer.render(scene, camera);
 }
 camera.layers.enable(1);
 
@@ -558,6 +610,7 @@ function changeScene(to){
 }
 
 window.changeScene = changeScene
+
 
 
 
