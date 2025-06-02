@@ -18,14 +18,14 @@ document.querySelector(".turnon").addEventListener("click", () => {
 });
 
 var appBlue;
-
+var activeWindow = 0;
 document.querySelectorAll(".app img").forEach((img) => {
     img.addEventListener("click", (e) => {
         e.stopPropagation();
         if(appBlue)
             appBlue.style.background = "transparent";
         appBlue = img;
-        img.style.background = "#3399FF";
+        img.style.background = "rgba(51, 153, 255, 0.3)";
     });
 });
 
@@ -36,11 +36,20 @@ document.querySelector(".apps").addEventListener("click", (e) =>{
 
 document.querySelectorAll(".app img").forEach((app) => {
     app.addEventListener("dblclick", () => {
-        console.log(app.id);
-        openApp(app.id);
+        console.log("double click" + app.id);
+        activeWindow = document.getElementById(app.id + "Window");
+        activeWindow.classList.remove("displayHide");
     });
 });
 
-function openApp(id){
-    
-};
+
+document.querySelector(".appWindow").addEventListener( "wheel", (e) => {
+    e.preventDefault();
+    console.log("daw");
+}, {passive: false});
+
+document.querySelectorAll(".crossButton").forEach((button) => {
+    button.addEventListener("click", () => {
+        activeWindow.classList.add("displayHide");
+    });
+});

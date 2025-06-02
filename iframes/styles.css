@@ -5,10 +5,37 @@ body{
     overflow-y: hidden;
     color:#EEEEEE;
 }
+
 iframe{
     width: 100%;
-    height: 645px;
+    height: 100%;
     filter: contrast(1.1) saturate(1.2);
+}
+
+#simonSayIframe{
+  zoom: 0.6;  
+}
+
+.iframe{
+  position: absolute;
+  top:0px;
+  left:0px;
+  z-index: 5;
+  height: 100vh;
+  
+}
+
+.window{
+  border: 2px solid rgb(37, 37, 37);
+  height:80%;
+  width: 80%;
+  border-radius: 8px;
+}
+
+.crossbar{
+  background-color: blue;
+  height:5%;
+  width: 100%;
 }
 
 .content{
@@ -28,6 +55,32 @@ iframe{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.flex-start2{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.flex-end{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.crossButton{
+  cursor:pointer;
+  height: 100%;
+  width: 40%;
+}
+.crossButton:hover{
+  background-color: red;
+}
+
+.appWindow{
+  /* background-color: #00ADB5; */
+  height: 100%;
+  width: 100%;
 }
 
 .turnon{
@@ -64,12 +117,13 @@ iframe{
 
 .app img{
     cursor: pointer;
-    padding:3px;
+    padding:6px;
 }
 
-.app img:focus{
-    transform: scale(2);
-}
+/* .app img:focus{
+    scale: (1.2);
+} */
+
 
 
 

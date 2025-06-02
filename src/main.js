@@ -372,6 +372,7 @@ window.addEventListener(
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
     bloomComposer.setSize(window.innerWidth, window.innerHeight);
+    css3dRenderer.setSize(window.innerWidth, window.innerHeight);
   },
   false
 );
