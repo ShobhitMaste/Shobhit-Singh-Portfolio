@@ -41,7 +41,7 @@ document.querySelectorAll(".app img").forEach((app) => {
         if(app.id == "recursion"){
             const recursionIframe = document.createElement("iframe");
             recursionIframe.id = "recursionIframe";
-            recursionIframe.src = "http://localhost:5173/Shobhit-Singh-Portfolio/";
+            recursionIframe.src = "https://shobhitmaste.github.io/Shobhit-Singh-Portfolio/";
             // console.log("#" + app.id + "Window" + " .appWindow");
             document.querySelector("#" + app.id + "Window" + " .appWindow").appendChild(recursionIframe);
         }
