@@ -420,12 +420,12 @@ textarea{
   .border{
     /* background-color: red; */
     font-size: 15px;
-    padding:10px;
+    padding:10px 10px 0px 10px;
     margin:0;
   }
 
   .border img{
-    height:35px;
+    height:30px;
   }
 
   .border h1{
