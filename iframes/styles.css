@@ -20,6 +20,9 @@ iframe{
   zoom: 0.8;
 }
 
+#bloggifyIframe{
+  zoom: 0.7;
+}
 .iframe{
   position: absolute;
   top:0px;

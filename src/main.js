@@ -247,13 +247,17 @@ div.style.width = '1128px';
 div.style.height = '645px';
 div.style.backgroundColor = '#aaaaaa';
 div.style.transform = `scale(0.2)`;
+div.id = "saviorOfScrolls";
+div.style.pointerEvents = 'auto';
 
 const iframe = document.createElement( 'iframe' );
 iframe.style.width = '1128px';
 iframe.style.height = '645px';
 iframe.style.border = '0px';
 iframe.src = 'http://127.0.0.1:3000/iframes/index.html';
+iframe.style.pointerEvents = 'auto';
 div.appendChild( iframe );
+
 
 const screen = new CSS3DObject( div );
 scene.add(screen);
@@ -387,10 +391,8 @@ var onceForLaptop = true;
 const moonPos = new THREE.Vector3(100, 100, -400);
 const laptopPos = new THREE.Vector3(0, 300, -800);
 
-
 function animate() {
   // console.log(camera.position)
-  
   
   requestAnimationFrame( animate );
   let t = document.body.getBoundingClientRect().top;

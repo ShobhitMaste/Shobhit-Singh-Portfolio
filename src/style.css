@@ -416,6 +416,8 @@ textarea{
 .moonTitle{
   margin:20px 0px;
 }
+
+
 @media (max-width: 900px){
   .border{
     /* background-color: red; */
@@ -439,6 +441,7 @@ textarea{
     margin: 10px 0px;
   }
 }
+
 
 
 

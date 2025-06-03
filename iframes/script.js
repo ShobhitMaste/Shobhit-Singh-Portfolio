@@ -36,13 +36,13 @@ document.querySelector(".apps").addEventListener("click", (e) =>{
 
 document.querySelectorAll(".app img").forEach((app) => {
     app.addEventListener("dblclick", () => {
-        console.log("double click - " + app.id);
         activeWindow = document.getElementById(app.id + "Window");
         activeWindow.classList.remove("displayHide");
         if(app.id == "recursion"){
             const recursionIframe = document.createElement("iframe");
+            recursionIframe.id = "recursionIframe";
             recursionIframe.src = "http://localhost:5173/Shobhit-Singh-Portfolio/";
-            console.log("#" + app.id + "Window" + " .appWindow");
+            // console.log("#" + app.id + "Window" + " .appWindow");
             document.querySelector("#" + app.id + "Window" + " .appWindow").appendChild(recursionIframe);
         }
     });
@@ -57,5 +57,8 @@ document.querySelectorAll(".app img").forEach((app) => {
 document.querySelectorAll(".crossButton").forEach((button) => {
     button.addEventListener("click", () => {
         activeWindow.classList.add("displayHide");
+        if(activeWindow.id == "recursionWindow"){
+            document.getElementById("recursionIframe").remove();
+        }
     });
 });
