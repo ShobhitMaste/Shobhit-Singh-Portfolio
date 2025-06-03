@@ -36,17 +36,23 @@ document.querySelector(".apps").addEventListener("click", (e) =>{
 
 document.querySelectorAll(".app img").forEach((app) => {
     app.addEventListener("dblclick", () => {
-        console.log("double click" + app.id);
+        console.log("double click - " + app.id);
         activeWindow = document.getElementById(app.id + "Window");
         activeWindow.classList.remove("displayHide");
+        if(app.id == "recursion"){
+            const recursionIframe = document.createElement("iframe");
+            recursionIframe.src = "http://localhost:5173/Shobhit-Singh-Portfolio/";
+            console.log("#" + app.id + "Window" + " .appWindow");
+            document.querySelector("#" + app.id + "Window" + " .appWindow").appendChild(recursionIframe);
+        }
     });
 });
 
-
-document.querySelector(".appWindow").addEventListener( "wheel", (e) => {
-    e.preventDefault();
-    console.log("daw");
-}, {passive: false});
+//<iframe id="recursion" src="http://localhost:5173/Shobhit-Singh-Portfolio/"></iframe>
+// document.querySelector(".appWindow").addEventListener( "wheel", (e) => {
+//     e.preventDefault();
+//     console.log("daw");
+// }, {passive: false});
 
 document.querySelectorAll(".crossButton").forEach((button) => {
     button.addEventListener("click", () => {

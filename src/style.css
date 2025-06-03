@@ -43,9 +43,8 @@ html{
   height:100%;
 }
 
-.MainTitle{
-  grid-area: 2/1/4/9;
-  
+.Hero{
+  grid-area: 2/1/10/12;
 }
 
 .maintitle{
@@ -60,9 +59,6 @@ padding: 0;;
   color: transparent;
   background-clip: text;
   
-}
-.heroContacts{
-  grid-area: 6/1/7/6;
 }
 .flex-left2{
   width:100%;
@@ -386,7 +382,7 @@ textarea{
 }
 
 .moonHead{
-  grid-area: 2/6/4/10;
+  grid-area: 2/6/8/11;
 }
 .moonHead button{
   border:0;
@@ -394,10 +390,6 @@ textarea{
   width:150px;
   border-radius: 5px;
   font-size: 24px;
-}
-.techStack{
-  grid-area:5/6/9/10;
-  
 }
 .techIcons{
   display: flex;
@@ -412,6 +404,40 @@ textarea{
   border-radius: 10px;
   background: rgba(36, 36, 36, 0.2);
   border :2px solid white;
+  padding:20px 40px;
+  height: 80%;;
+  width: 77%;;
+}
+
+.lolololol{
+  margin-top: 10%;
+}
+
+.moonTitle{
+  margin:20px 0px;
+}
+@media (max-width: 900px){
+  .border{
+    /* background-color: red; */
+    font-size: 15px;
+    padding:10px;
+    margin:0;
+  }
+
+  .border img{
+    height:35px;
+  }
+
+  .border h1{
+    font-size: 23px;
+  }
+  .lolololol{
+    margin-top:20px;
+    padding: 0;
+  }
+  .moonTitle{
+    margin: 10px 0px;
+  }
 }
 
 

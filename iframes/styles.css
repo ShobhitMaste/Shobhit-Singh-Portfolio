@@ -16,6 +16,10 @@ iframe{
   zoom: 0.6;  
 }
 
+#calculatorIframe{
+  zoom: 0.8;
+}
+
 .iframe{
   position: absolute;
   top:0px;

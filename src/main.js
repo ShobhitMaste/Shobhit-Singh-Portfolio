@@ -252,7 +252,7 @@ const iframe = document.createElement( 'iframe' );
 iframe.style.width = '1128px';
 iframe.style.height = '645px';
 iframe.style.border = '0px';
-iframe.src = 'https://shobhitmaste.github.io/portfolioSideMission/';
+iframe.src = 'http://127.0.0.1:3000/iframes/index.html';
 div.appendChild( iframe );
 
 const screen = new CSS3DObject( div );
@@ -384,8 +384,8 @@ var once = true;
 var finalPhonepos;
 var finalMoonpos;
 var onceForLaptop = true;
-const moonPos = new THREE.Vector3(0, 0, 100);
-
+const moonPos = new THREE.Vector3(100, 100, -400);
+const laptopPos = new THREE.Vector3(0, 300, -800);
 
 
 function animate() {
@@ -446,12 +446,12 @@ function animate() {
       );
 
 
-      smartphone.position.lerp(targetPos, 0.05);
+      smartphone.position.lerp(targetPos, 0.1);
 
     if(currentSection == 1 && once == true){
          //used for animation
       
-      if(-t == vh){
+      if((-t < (vh + 4)) && (-t > (vh - 1))){
         const dir = new THREE.Vector3();
         camera.getWorldDirection(dir);
         const cameraPosition = camera.position;
@@ -463,10 +463,10 @@ function animate() {
       }
       // smartphone.lookAt(camera.position);
     } 
-    console.log(t, vh);
+    // console.log(t, vh);
     // console.log(moonPos);
 
-    moon.position.lerp(moonPos, 0.05);
+    moon.position.lerp(moonPos, 0.1);
       
     if(smartphone && currentSection  == 1){
       if(phoneFullscreen == true){
@@ -476,10 +476,10 @@ function animate() {
         const dir = new THREE.Vector3();
         camera.getWorldDirection(dir);
         const phonePos = new THREE.Vector3();
-        phonePos.copy(camera.position).add(dir.multiplyScalar(2));
-        phonePos.x += -1.8;
-        phonePos.y += 0;
-        phonePos.z += 1;
+        phonePos.copy(camera.position).add(dir.multiplyScalar(0));
+        phonePos.x += 0;
+        phonePos.y += 2.7;
+        phonePos.z += 3;
         smartphone.position.lerp(phonePos, 0.05);
 
       } 
@@ -494,7 +494,7 @@ function animate() {
         moon.position.z - 1.3
         );
 
-        smartphone.position.lerp(targetPos, 0.05);
+        smartphone.position.lerp(targetPos, 0.1);
       }
 
     }
@@ -502,31 +502,32 @@ function animate() {
   }
 
   if(currentSection == 2 && onceForLaptop){
+    if((-t < (vh*2 + 2)) && (-t >= (vh*2)-0.7)){
     const dir = new THREE.Vector3();
     camera.getWorldDirection(dir);
-    const laptopPos = new THREE.Vector3();
-    laptopPos.copy(camera.position).add(dir.multiplyScalar(0.18));
-    laptop.lookAt(camera.position);
-    laptop.position.y = -0.09;
-    laptop.position.lerp(laptopPos, 0.05);
+    const cameraPosition = camera.position;
+    
+    laptopPos.copy(cameraPosition).add(dir.multiplyScalar(0.18));
+    laptop.lookAt(cameraPosition);
     laptop.rotation.x = 0;
     laptop.rotation.y = 0;
     laptop.rotation.z = 0;
-
+    
+    onceForLaptop = false;
+    }
+    pointLightLaptop.position.lerp(laptop.position , 0.05);
+    pointLightLaptop.position.z += 0.1;
+    pointLightLaptop.position.y += 0.1;
+  }
+  if(laptop){
+    laptop.position.lerp(laptopPos, 0.1);
+    laptop.position.y = -0.09;
     screen.position.copy(laptop.position);
     screen.quaternion.copy(laptop.quaternion);
     screen.rotation.x = -0;
     screen.position.x += 0;
-    screen.position.y += 70;
+    screen.position.y += 50;
     screen.position.z -= 800;
-  
-    pointLightLaptop.position.lerp(laptop.position , 0.05);
-    pointLightLaptop.position.z += 0.1;
-    pointLightLaptop.position.y += 0.1;
-    setTimeout(() => {
-      onceForLaptop = false;
-      // screen.visible = true;
-    }, 2000)
   }
 
   bloomComposer.render();
