@@ -25,6 +25,7 @@ initRapier();
 
 const canvas = document.getElementById("bg");
 
+const clock = new THREE.Clock();
 //settings
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -307,7 +308,7 @@ var laptopInitiated = false;
         laptopInitiated = true;
         setTimeout(() => {
           screen.visible = true;
-        }, 2000);
+        }, 2500);
       }
     }
 
@@ -393,8 +394,11 @@ const laptopPos = new THREE.Vector3(0, 300, -800);
 
 function animate() {
   // console.log(camera.position)
-  
   requestAnimationFrame( animate );
+
+  const deltaTime = clock.getDelta();
+  const lerpSpeed = 6;
+
   let t = document.body.getBoundingClientRect().top;
   camera.position.z = t * 0.3;
   // camera.rotation.z = t * 0.0002;
@@ -418,7 +422,7 @@ function animate() {
     rayCaster.ray.intersectPlane(plane, targetPoint);
 
     // Optionally smooth the movement
-    amongus.position.lerp(targetPoint, 0.01);
+    amongus.position.lerp(targetPoint, 1 - Math.exp(-1.5 * deltaTime));
     var x = amongus.position.x;
     var y = amongus.position.y;
     var z = amongus.position.z;
@@ -448,7 +452,7 @@ function animate() {
       );
 
 
-      smartphone.position.lerp(targetPos, 0.1);
+      smartphone.position.lerp(targetPos, 1 - Math.exp(-lerpSpeed * deltaTime));
 
     if(currentSection == 1 && once == true){
          //used for animation
@@ -468,7 +472,7 @@ function animate() {
     // console.log(t, vh);
     // console.log(moonPos);
 
-    moon.position.lerp(moonPos, 0.1);
+    moon.position.lerp(moonPos, 1 - Math.exp(-10 * deltaTime));
       
     if(smartphone && currentSection  == 1){
       if(phoneFullscreen == true){
@@ -479,10 +483,10 @@ function animate() {
         camera.getWorldDirection(dir);
         const phonePos = new THREE.Vector3();
         phonePos.copy(camera.position).add(dir.multiplyScalar(0));
-        phonePos.x += 0;
-        phonePos.y += 2.7;
-        phonePos.z += 3;
-        smartphone.position.lerp(phonePos, 0.05);
+        phonePos.x += -0.7;
+        phonePos.y += 1.4;
+        phonePos.z += 1;
+        smartphone.position.lerp(phonePos, 1 - Math.exp(-6 * deltaTime));
 
       } 
       
@@ -496,7 +500,7 @@ function animate() {
         moon.position.z - 1.3
         );
 
-        smartphone.position.lerp(targetPos, 0.1);
+        smartphone.position.lerp(targetPos, 1 - Math.exp(-lerpSpeed * deltaTime));
       }
 
     }
@@ -517,12 +521,12 @@ function animate() {
     
     onceForLaptop = false;
     }
-    pointLightLaptop.position.lerp(laptop.position , 0.05);
+    pointLightLaptop.position.lerp(laptop.position , 1 - Math.exp(-6 * deltaTime));
     pointLightLaptop.position.z += 0.1;
     pointLightLaptop.position.y += 0.1;
   }
   if(laptop){
-    laptop.position.lerp(laptopPos, 0.1);
+    laptop.position.lerp(laptopPos, 1 - Math.exp(-lerpSpeed * deltaTime));
     laptop.position.y = -0.09;
     screen.position.copy(laptop.position);
     screen.quaternion.copy(laptop.quaternion);

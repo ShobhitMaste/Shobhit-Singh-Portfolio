@@ -201,6 +201,33 @@ background-color: red;
   grid-template-columns: repeat(12, 1fr);
 }
 
+.screenHeading{
+  translate: 0% -50%;
+}
+
+.screenHeading h1{
+  font-size: 50px;
+}
+.screenHeading h2 {
+  font-size: 30px;;
+}
+
+#exit{
+  left:90%;
+  top:5%;
+  position: absolute;
+  width: 100%;
+}
+
+#exit svg{
+  transition: transform 0.3s ease;
+}
+
+#exit svg:hover{
+  transform : scale(1.2);
+}
+
+
 .flex{
   display: flex;
   justify-content: center;
@@ -241,6 +268,10 @@ background-color: red;
 
 .title{
   grid-area: 2/2/4/5;
+}
+
+.gap2{
+  gap:30px;
 }
 
 .normalText{
@@ -397,6 +428,11 @@ textarea{
   align-items: center;
   gap: 7%;
 }
+
+.gap3{
+  gap: 10%;
+}
+
 .techIcons img{
   background-color: transparent;
 }
@@ -418,7 +454,7 @@ textarea{
 }
 
 
-@media (max-width: 900px){
+@media (max-width: 900px), (max-height: 650px){
   .border{
     /* background-color: red; */
     font-size: 15px;
@@ -439,6 +475,18 @@ textarea{
   }
   .moonTitle{
     margin: 10px 0px;
+  }
+  .maintitle, .smallHero{
+    font-size: 45px;
+  }
+  .heroContact svg{
+    height: 29px;;
+  }
+}
+ 
+@media (max-width: 890px) , (max-height: 750px){
+  .sidebar{
+    translate: -0% 35%;
   }
 }
 

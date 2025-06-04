@@ -12,6 +12,10 @@ iframe{
     filter: contrast(1.1) saturate(1.2);
 }
 
+#recursionIframe{
+  zoom: 0.8;
+}
+
 #simonSayIframe{
   zoom: 0.6;  
 }
