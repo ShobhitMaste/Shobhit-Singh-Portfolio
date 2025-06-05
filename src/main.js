@@ -297,7 +297,7 @@ document.querySelectorAll(".dot").forEach((el) => {
         if(lastSection == 0){
           setTimeout(() => {
             screen.visible = true;
-          }, 1000);
+          }, 800);
         } else {
           setTimeout(() => {
             screen.visible = true;
@@ -615,9 +615,11 @@ function PhoneFullscreenModeSwitch(){
     nophonefullscreen = false;
     document.getElementById("moonContent").classList.add("hidden");
     document.getElementById("horizontalPhoneScreen").classList.remove("hidden");
+    document.getElementById("scrollTeller").classList.add("hidden");
     setTimeout(() => {
         document.getElementById("moonContent").classList.add("displayHide");
         document.getElementById("horizontalPhoneScreen").classList.remove("displayHide");
+        document.getElementById("scrollTeller").classList.add("displayHide");
     }, 500);
 
     //loading screen
@@ -643,10 +645,12 @@ function PhoneFullscreenModeSwitch(){
     smartphoneMode = false;
     phoneFullscreen = false;
     nophonefullscreen = true;
+    document.getElementById("scrollTeller").classList.remove("hidden");
     document.getElementById("moonContent").classList.remove("hidden");
     // document.getElementById("horizontalPhoneScreen").classList.add("hidden");
     document.getElementById("horizontalPhoneScreen").classList.add("displayHide");
     setTimeout(() => {
+      document.getElementById("scrollTeller").classList.remove("displayHide");
       document.getElementById("moonContent").classList.remove("displayHide");
     }, 500);
   }

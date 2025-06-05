@@ -6,7 +6,7 @@ html{
 #scrollTeller{
   position: fixed;
   top:38%;
-  left:97%;
+  left:96%;
   z-index: 10;
 }
 
@@ -488,7 +488,7 @@ textarea{
 }
 .border{
   border-radius: 10px;
-  background: rgba(36, 36, 36, 0.2);
+  background: rgba(36, 36, 36, 0.3);
   border :2px solid white;
   padding:20px 40px;
   height: 80%;;
@@ -501,6 +501,7 @@ textarea{
 
 .moonTitle{
   margin:20px 0px;
+  font-size: 34px;;
 }
 
 
