@@ -1,3 +1,9 @@
+if(window.innerWidth <= 450){
+  window.location.href = "https://shobhitmaste.github.io/portfolio-website-mobile-site/";
+} else {
+  // window.location.href = "http://localhost:5173/Shobhit-Singh-Portfolio/";
+}
+
 import * as THREE from "three";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import Geometries from "three/src/renderers/common/Geometries.js";
@@ -8,10 +14,10 @@ import { RenderPass } from "/node_modules/three/examples/jsm/postprocessing/Rend
 import { UnrealBloomPass } from "/node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { mx_fractal_noise_float, nodeProxy } from "three/src/nodes/TSL.js";
-import { FontLoader, TextGeometry } from "three/examples/jsm/Addons.js";
+import { CSS3DRenderer, FontLoader, TextGeometry } from "three/examples/jsm/Addons.js";
 import * as RAPIER from '@dimforge/rapier3d-compat';
 import { mx_bilerp_0 } from "three/src/nodes/materialx/lib/mx_noise.js";
-import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+import {  CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 
 let world;
 async function initRapier(){
@@ -78,7 +84,9 @@ const sunMaterial = new THREE.MeshBasicMaterial( {
   // normalMap: sun3dTexture,
 } );
 const sun = new THREE.Mesh( sunGeometry, sunMaterial );
+
 sun.position.set(100,40,-110);
+
 scene.add(sun);
 
 
@@ -96,8 +104,11 @@ const moon = new THREE.Mesh( moonGeometry, moonMaterial );
 var vh = window.innerHeight;
 var iw = window.innerWidth;
 var aspect = iw / vh;
+
+
+
 // console.log(aspect);
-console.log("vh - " + vh);
+console.log("vh - " + vh, "iw - " + iw);
 // moon.position.set(-1.8, -3.6, -vh/3.318);
 moon.position.set(1000, 1000, -500);
 moon.rotation.x = 0.775;
@@ -225,19 +236,10 @@ var laptop;
 loader.load('models/laptop2.glb', (gltf) => {
   laptop = gltf.scene;
   laptop.position.set(0, 300, -800)
-  // laptop.traverse(child => {
-  //   if (child.isMesh && child.material) {
-  //   child.material.emissive = new THREE.Color(0x000000);       // Disable glow
-  //   child.material.emissiveIntensity = 0;
-  //   child.material.metalness = 0.2;
-  //   child.material.roughness = 0.6;
-  //   child.material.needsUpdate = true;
-  // }
-  // });
   scene.add(laptop);
 });
 
-//testing
+
 
 const css3dRenderer = new CSS3DRenderer();
 css3dRenderer.setSize( window.innerWidth, window.innerHeight );
@@ -262,20 +264,57 @@ div.appendChild( iframe );
 
 const screen = new CSS3DObject( div );
 scene.add(screen);
-// screen.scale.set(0.2);
 screen.position.set(0,0, -100);
 screen.visible = false;
-
-//testing end
-
 
 
 let currentSection = 0;
 const totalSections = 3;
 var lastSection = 0;
-var smartphoneMode = false;  //remember to turn it true
+var smartphoneMode = false;  //remember to turn it false
 var timerStarted = false;
 var laptopInitiated = false;
+
+document.querySelectorAll(".dot").forEach((el) => {
+  el.addEventListener("click" , (e) => {
+    lastSection = currentSection;
+    document.getElementById(lastSection).classList.remove("selected");
+    currentSection = el.id;
+    // console.log(nextSection);
+    window.scrollTo({
+      top: currentSection * window.innerHeight,
+      behavior: 'smooth'
+    });
+    document.getElementById(currentSection).classList.add("selected");
+    console.log(lastSection, currentSection);
+
+
+    if(currentSection != 2){
+      screen.visible = false;
+    }
+    else if(currentSection == 2){
+      if(laptopInitiated){
+        if(lastSection == 0){
+          setTimeout(() => {
+            screen.visible = true;
+          }, 1000);
+        } else {
+          setTimeout(() => {
+            screen.visible = true;
+          }, 500);
+        }
+      } else {
+        laptopInitiated = true;
+        setTimeout(() => {
+          screen.visible = true;
+        }, 2500);
+      }
+    }
+  });
+});
+
+document.getElementById(currentSection).classList.add("selected");
+
   document.querySelectorAll(".body").forEach((el) => {
     el.addEventListener("wheel", (e) => {
     e.stopPropagation();
@@ -284,6 +323,7 @@ var laptopInitiated = false;
   })
 
   window.addEventListener('wheel', (e) => {
+    
     // console.log(e);
     e.preventDefault();
     if(!smartphoneMode && timerStarted == false){
@@ -292,11 +332,11 @@ var laptopInitiated = false;
       if (e.deltaY > 0 && currentSection < totalSections - 1) {
         currentSection++;
       } else if (e.deltaY < 0 && currentSection > 0) {
-        currentSection--;
+          currentSection--;
       }
       console.log(lastSection, currentSection);
       
-      if(currentSection == 1){
+    if(currentSection == 1){
       screen.visible = false;
     }
     else if(currentSection == 2){
@@ -311,11 +351,14 @@ var laptopInitiated = false;
         }, 2500);
       }
     }
-
+    // console.log(currentSection);
+    document.getElementById(lastSection).classList.remove("selected");
+    document.getElementById(currentSection).classList.add("selected");
       window.scrollTo({
         top: currentSection * window.innerHeight,
         behavior: 'smooth'
       });
+      
 
       setTimeout(()=> {
         timerStarted = false;
@@ -380,6 +423,9 @@ window.addEventListener(
     renderer.setSize(window.innerWidth, window.innerHeight);
     bloomComposer.setSize(window.innerWidth, window.innerHeight);
     css3dRenderer.setSize(window.innerWidth, window.innerHeight);
+    if(window.innerWidth <= 450){
+      window.location.href = "https://shobhitmaste.github.io/portfolio-website-mobile-site/";
+    }
   },
   false
 );
@@ -391,15 +437,26 @@ var finalMoonpos;
 var onceForLaptop = true;
 const moonPos = new THREE.Vector3(100, 100, -400);
 const laptopPos = new THREE.Vector3(0, 300, -800);
+const phoneWidth = 500;
+const phoneHeight = 800;
+let wait = true;
 
 function animate() {
-  // console.log(camera.position)
-  requestAnimationFrame( animate );
 
+  requestAnimationFrame( animate );
+  if(window.innerHeight != vh && wait){
+    
+    location.reload();
+    wait = false;
+    setTimeout(() => {
+      wait = true;
+    }, 1000);
+  }
   const deltaTime = clock.getDelta();
   const lerpSpeed = 6;
 
   let t = document.body.getBoundingClientRect().top;
+  // console.log(t);
   camera.position.z = t * 0.3;
   // camera.rotation.z = t * 0.0002;
   // console.log(camera.fov);
@@ -437,7 +494,6 @@ function animate() {
 
   }
   if(smartphone){
-
     pivot.position.copy(smartphone.position);
     
     pivot.rotation.y += 0.003;
@@ -507,7 +563,7 @@ function animate() {
     
   }
 
-  if(currentSection == 2 && onceForLaptop){
+  if(currentSection == 2 && onceForLaptop ){
     if((-t < (vh*2 + 2)) && (-t >= (vh*2)-0.7)){
     const dir = new THREE.Vector3();
     camera.getWorldDirection(dir);
@@ -526,7 +582,7 @@ function animate() {
     pointLightLaptop.position.y += 0.1;
   }
   if(laptop){
-    laptop.position.lerp(laptopPos, 1 - Math.exp(-lerpSpeed * deltaTime));
+    laptop.position.lerp(laptopPos, 1 - Math.exp(-7 * deltaTime));
     laptop.position.y = -0.09;
     screen.position.copy(laptop.position);
     screen.quaternion.copy(laptop.quaternion);
@@ -534,6 +590,9 @@ function animate() {
     screen.position.x += 0;
     screen.position.y += 50;
     screen.position.z -= 800;
+    
+
+    
   }
 
   bloomComposer.render();
@@ -625,7 +684,11 @@ function changeScene(to){
 
 window.changeScene = changeScene
 
-
+document.addEventListener('mousedown', (e) => {
+  if (e.button === 1) { // 1 = middle mouse button
+    e.preventDefault();
+  }
+});
 
 
 
