@@ -1,4 +1,4 @@
-3D portfolio website made using 3js and vanilla javascript.
+# 3D portfolio website made using 3js and vanilla javascript.
 visit here - https://shobhitmaste.github.io/Shobhit-Singh-Portfolio/
 
 The website is MAINLY for Laptops and Desktops. NOT for mobiles.
