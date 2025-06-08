@@ -12,6 +12,10 @@ iframe{
     filter: contrast(1.1) saturate(1.2);
 }
 
+#tictactoeIframe{
+  zoom: 0.65;
+}
+
 #recursionIframe{
   zoom: 0.8;
 }

@@ -49,6 +49,10 @@
                 <img id="calculator" src="./public/calculator.png" alt="calculator" height="60">
                 <p>Calculator</p>
             </div>
+            <div id="tictactoeDiv" class="mt-0 mb-0 gap flex-center flex-col app">
+                <img id="tictactoe" src="./public/tictactoe.png" alt="tictactoe" height="60">
+                <p>Tic Tac Toe</p>
+            </div>
         </div>
     </div>
 
@@ -121,6 +125,28 @@
         </div>
     </div>
 
+
+    <div class="content displayHide" id="tictactoeWindow">
+        <div class="content iframe flex-center">
+            <div class="window flex-left flex-col">
+                <div class="crossbar row m-0">
+                    <div class="flex-start2 col-2">
+                        <p class="m-0">Tic Tac Toe</p>
+                    </div>
+                    <div class="flex-end offset-9 col-1 p-0">
+                        <div class="crossButton pe-1 flex-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="appWindow">
+                    <iframe id="tictactoeIframe" src="https://shobhitmaste.github.io/tic-tac-toe-react/"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <script src="./script.js" defer></script>
