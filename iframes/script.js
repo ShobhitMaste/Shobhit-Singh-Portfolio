@@ -2,6 +2,11 @@ document.querySelector("body").addEventListener("wheel", (e) => {
     e.preventDefault();
 }, {passive: false});
 
+document.addEventListener('mousedown', (e) => {
+  if (e.button === 1) { // 1 = middle mouse button
+    e.preventDefault();
+  }
+});
 
 const loadingScreen = document.querySelector(".Loader");
 const iframe = document.querySelector(".iframe");
